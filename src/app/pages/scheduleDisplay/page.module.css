@@ -1,0 +1,272 @@
+.pageContainer {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #fafafa;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.header {
+  padding: 20px 40px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.header h1 {
+  margin: 0;
+  color: #000000;
+  font-size: 24px;
+}
+
+.mainContent {
+  flex: 1;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  color: #000000;
+}
+
+.calendarContainer {
+  height: 600px;
+  /* or flex-grow if parent allows */
+  width: 100%;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  /* Ensure calendar doesn't spill out */
+  flex: 1;
+  /* Allow it to grow in the flex container */
+}
+
+/* Customizing React Big Calendar Styles */
+.calendarContainer :global(.rbc-calendar) {
+  font-family: 'Montserrat', sans-serif;
+  min-height: 580px;
+  /* Ensure ample height */
+}
+
+.calendarContainer :global(.rbc-month-view) {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border: 1px solid #ddd;
+}
+
+.calendarContainer :global(.rbc-month-row) {
+  flex: 1 1 0px;
+  /* Force rows to share height equally */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  /* Prevent overflow stacking */
+  min-height: 80px;
+  /* Minimum row height */
+}
+
+.calendarContainer :global(.rbc-header) {
+  padding: 15px 10px;
+  /* Increased vertical padding */
+  font-weight: 600;
+  background-color: #f8f9fa;
+  flex: 1 1 0px;
+  /* Ensure strictly equal width shared with other headers */
+  min-height: 50px;
+  /* Ensure it doesn't collapse */
+  display: flex;
+  align-items: center;
+  /* Center text vertically */
+  justify-content: center;
+}
+
+/* Ensure day background columns also flex equally to align with headers */
+.calendarContainer :global(.rbc-day-bg) {
+  flex: 1 1 0px;
+}
+
+/* Also ensure time view headers are handled if they differ */
+.calendarContainer :global(.rbc-time-header) {
+  flex: 0 0 auto;
+  min-height: 50px;
+}
+
+/* Fix for squeezed month header row */
+.calendarContainer :global(.rbc-month-header) {
+  min-height: 50px;
+  /* Force minimum height for the header row */
+  height: auto;
+  display: flex;
+  align-items: center;
+  /* Center content vertically */
+}
+
+.calendarContainer :global(.rbc-event) {
+  background-color: #3174ad;
+  /* Customize event color */
+  border-radius: 4px;
+}
+
+/* Overlay Styles */
+.overlayBackdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.overlayContent {
+  background: rgba(255, 255, 255, 0.95);
+  width: 90%;
+  max-width: 500px;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: slideUpModal 0.3s ease-out;
+  max-height: 80vh;
+}
+
+.overlayHeader {
+  padding: 20px;
+  background: #FF4B2B;
+  /* Match Main Theme */
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.overlayHeader h2 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.overlayHeader span {
+  font-size: 0.9rem;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 2rem;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.agendaList {
+  padding: 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.agendaItem {
+  display: flex;
+  gap: 15px;
+  padding: 15px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  border: 1px solid #eee;
+  transition: transform 0.2s;
+}
+
+.agendaItem:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+}
+
+.timeBadge {
+  background: #f0f0f0;
+  padding: 10px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: #333;
+  min-width: 70px;
+}
+
+.eventDetails h3 {
+  margin: 0 0 5px 0;
+  color: #333;
+  font-size: 1.1rem;
+}
+
+.eventDetails p {
+  margin: 0;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.noEvents {
+  text-align: center;
+  color: #999;
+  font-style: italic;
+  padding: 20px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUpModal {
+  from {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.scheduleTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.scheduleTable th,
+.scheduleTable td {
+  border: 1px solid #080808ad;
+  color: black;
+  padding: 12px;
+  text-align: left;
+}
+
+.scheduleTable th {
+  background-color: #f2f2f2;
+  color: #000000;
+}
+
+.scheduleTable tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.scheduleTable tr:hover {
+  background-color: #f1f1f1;
+}

@@ -1,66 +1,53 @@
-import Image from "next/image";
+"use client";
+
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import styles from "./page.module.css";
 
-export default function Home() {
+export default function RootPage() {
+  const router = useRouter();
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    // Total duration in ms
+    const duration = 6000;
+    const intervalTime = 50; // Update every 50ms for smooth animation
+    const steps = duration / intervalTime;
+    const increment = 100 / steps;
+
+    const timer = setInterval(() => {
+      setProgress((prev) => {
+        const next = prev + increment;
+        if (next >= 100) {
+          clearInterval(timer);
+          return 100;
+        }
+        return next;
+      });
+    }, intervalTime);
+
+    // Redirect after 6 seconds
+    const redirectTimer = setTimeout(() => {
+      router.push("/pages/landingPage");
+    }, duration);
+
+    return () => {
+      clearInterval(timer);
+      clearTimeout(redirectTimer);
+    };
+  }, [router]);
+
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className={styles.intro}>
-          <h1>To get started, edit the page.tsx file.</h1>
-          <p>
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className={styles.loadingContainer}>
+      <video className={styles.backgroundVideo} autoPlay loop muted playsInline>
+        <source src="/loadingBackground.mp4" type="video/mp4" />
+      </video>
+      <div className={styles.content}>
+        <div className={styles.loadingMeterContainer}>
+          <div className={styles.loadingMeter} style={{ width: `${progress}%` }}></div>
         </div>
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className={styles.secondary}
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+        <p className={styles.loadingText}>Loading Scheduler...</p>
+      </div>
     </div>
   );
 }
