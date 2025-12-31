@@ -101,6 +101,21 @@ export default function ScheduleDisplay() {
     },
   };
 
+  const eventPropGetter = (event: CalendarEvent) => {
+    const backgroundColor = event.resource?.color || '#3174ad'; // Default blue if no color
+    // If background is white or light, text should be black, else white.
+    // Simple heuristic: if color is white (#FFFFFF), text black.
+    const isLight = backgroundColor.toUpperCase() === '#FFFFFF' || backgroundColor.toUpperCase() === '#FFFF00';
+
+    return {
+      style: {
+        backgroundColor: backgroundColor,
+        color: isLight ? 'black' : 'white',
+        border: '1px solid #ccc'
+      }
+    };
+  };
+
   return (
     <div className={styles.pageContainer}>
       <header className={styles.header}>
@@ -121,10 +136,8 @@ export default function ScheduleDisplay() {
             selectable
             onSelectSlot={handleSelectSlot}
             onSelectEvent={handleSelectEvent}
+            eventPropGetter={eventPropGetter}
             scrollToTime={new Date()} // Scroll to current time in week/day view
-            components={components}
-          // To make "whole month clickable" and clean, hiding events helps.
-          // We can also add a custom "dateCellWrapper" if we want to show a dot indicator instead of the event bar.
           />
         </div>
 

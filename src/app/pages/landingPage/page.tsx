@@ -8,8 +8,15 @@ import { accounts } from "../../data/accountSetup";
 export default function Home() {
   const router = useRouter();
   const [isSignUp, setIsSignUp] = useState<boolean>(false);
+
+  // Sign In State
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  // Sign Up State
+  const [signUpName, setSignUpName] = useState("");
+  const [signUpEmail, setSignUpEmail] = useState("");
+  const [signUpPassword, setSignUpPassword] = useState("");
 
   const handleSignIn = () => {
     const user = accounts.find(
@@ -24,6 +31,43 @@ export default function Home() {
     }
   };
 
+  const handleSignUp = async () => {
+    if (!signUpName || !signUpEmail || !signUpPassword) {
+      alert("Please fill in all fields");
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/accountSetup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: signUpName,
+          email: signUpEmail,
+          password: signUpPassword,
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Sign up success:", data);
+        alert(`Account created for ${data.user.name}! Please sign in.`);
+        setIsSignUp(false); // Switch to Sign In view
+        // Optionally pre-fill sign-in fields
+        setEmail(signUpEmail);
+        setPassword('');
+      } else {
+        const errorData = await response.json();
+        alert(`Sign up failed: ${errorData.message}`);
+      }
+    } catch (error) {
+      console.error("Sign up error:", error);
+      alert("An error occurred during sign up.");
+    }
+  };
+
   return (
     <div className={styles.landingWrapper}>
       <div className={`${styles.container} ${isSignUp ? styles.rightPanelActive : ''}`}>
@@ -32,10 +76,25 @@ export default function Home() {
           <form action="#">
             <h1>CREATE ACCOUNT</h1>
             <span>use your email for registration</span>
-            <input type="text" placeholder="Name" />
-            <input type="email" placeholder="Email" />
-            <input type="password" placeholder="Password" />
-            <button type="button">Sign Up</button>
+            <input
+              type="text"
+              placeholder="Name"
+              value={signUpName}
+              onChange={(e) => setSignUpName(e.target.value)}
+            />
+            <input
+              type="email"
+              placeholder="Email"
+              value={signUpEmail}
+              onChange={(e) => setSignUpEmail(e.target.value)}
+            />
+            <input
+              type="password"
+              placeholder="Password"
+              value={signUpPassword}
+              onChange={(e) => setSignUpPassword(e.target.value)}
+            />
+            <button type="button" onClick={handleSignUp}>Sign Up</button>
           </form>
         </div>
 

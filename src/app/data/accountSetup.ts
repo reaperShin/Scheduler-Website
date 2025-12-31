@@ -12,4 +12,11 @@ export const accounts: account[] = [
         email: "shinjin@gmail.com",
         password: "shinjin"
     }
+,
+{
+  "id": "1767162908285",
+  "name": "MJ",
+  "email": "johnjordandivina@gmail.com",
+  "password": "mjgalauran"
+}
 ]
